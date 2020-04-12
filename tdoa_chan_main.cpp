@@ -2,11 +2,12 @@
 #include<string.h>
 #include<iostream>
 #include<math.h>
-
-#define N 3
 //chan算法函数声明
+#define N 3
 void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  ai_2_tag_minus_a1_2_tag, double * tag_position);
-//void transposed3_3(double Ga[3][3], double(*Ga_)[3]);
+void transposed(double Ga[3][3], double(*Ga_)[3]);
+void matrix_inverse(double a[N][N], double b[N][N]);
+
 
 /*chan算法函数定义
 Arguments    : double num_of_anchor   -->anchor数量
@@ -25,8 +26,8 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	tag_position[1] = 15;
 */
 	int i = 0,j=0;//计数用
-	double Q[3][3] = { {1, 0.5, 0.5},{0.5, 1, 0.5},{0.5, 0.5, 1 } };
-	double Q_inver[3][3] = { {0,0,0},{ 0,0,0 },{ 0,0,0 } }
+	double Q[3][3] = { { 1, 0.5, 0.5 },{ 0.5, 1, 0.5 },{ 0.5, 0.5, 1 } };
+	double Q_inver[3][3] = { { 0,0,0 },{ 0,0,0 },{ 0,0,0 } };
 	double Ga[3][3] = { {0,0,0},{0,0,0},{0,0,0} };
 	double Anchor_pos[2][4]= { { 0,0,0,0 },{ 0,0,0,0 } };
 	double h[3] = {0,0,0};
@@ -73,21 +74,26 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 
 	/*Za0 = inv(Ga'*inv(Q)*Ga)*Ga'*inv(Q)*h';%(14b）*/
 	//将上述步骤拆解开来一步步实现：1）求矩阵转置； 2）矩阵求逆； 3）矩阵相乘求解
-	//1)求矩阵转置Ga'
-	transposed3_3(Ga,Ga_);
+	//1)求矩阵转置
+	transposed(Ga,Ga_);
 	//2)求矩阵求逆inv(Q)
-	//atrix_inverse(double Q[3][3], double Q_inver[3][3]);
+	matrix_inverse( Q, Q_inver);
+
 
 	/*for (i = 0; i < 3; i++)
 		for (j = 0; j < 3; j++)
 		{
-			printf("%f \n\n", Q[i][j]);
-		}*/
-
+			printf("%f \n\n", Ga_[i][j]);
+		}
 	for (i = 0; i < 3; i++)
 		for (j = 0; j < 3; j++)
 		{
-			printf("%f \n\n", Ga_[i][j]);
+			printf("%f \n\n", Q[i][j]);
+		}*/
+	for (i = 0; i < 3; i++)
+		for (j = 0; j < 3; j++)
+		{
+			printf("%f \n\n", Q_inver[i][j]);
 		}
 	//printf("%f", m);
 
@@ -95,7 +101,7 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 
 //3*3矩阵求转置的函数定义
 //此处学到一点，c语言的函数不能直接返回二维数组
-void transposed3_3(double Ga[3][3],double (*Ga_)[3])
+void transposed(double Ga[3][3],double (*Ga_)[3])
 {
 	int i = 0, j = 0;//计数用
 	for(i=0;i<3;i++)
@@ -106,91 +112,91 @@ void transposed3_3(double Ga[3][3],double (*Ga_)[3])
 	
 }
 
-//矩阵求逆函数
-//void matrix_inverse(double A[N][N], double[N][N])
-//{
-//	int i=0, j=0, k=0;
-//	double max=0, temp=0;
-//	// 定义一个临时矩阵t
-//	double t[N][N];
-//	// 将a矩阵临时存放在矩阵t[n][n]中
-//	for (i = 0; i<N; i++)
-//	{
-//		for (j = 0; j<N; j++)
-//		{
-//			t[i][j] = a[i][j];
-//		}
-//	}
-//	// 初始化B矩阵为单位矩阵
-//	for (i = 0; i<N; i++)
-//	{
-//		for (j = 0; j<N; j++)
-//		{
-//			b[i][j] = (i == j) ? 1 : 0;//此处删除了1之前的（float）
-//		}
-//	}
-//	// 进行列主消元，找到每一列的主元
-//	for (i = 0; i<N; i++)
-//	{
-//		max = t[i][i];
-//		// 用于记录每一列中的第几个元素为主元
-//		k = i;
-//		// 寻找每一列中的主元元素
-//		for (j = i + 1; j<N; j++)
-//		{
-//			if (fabsf(t[j][i]) > fabsf(max))
-//			{
-//				max = t[j][i];
-//				k = j;
-//			}
-//		}
-//		//cout<<"the max number is "<<max<<endl;
-//		// 如果主元所在的行不是第i行，则进行行交换
-//		if (k != i)
-//		{
-//			// 进行行交换
-//			for (j = 0; j<N; j++)
-//			{
-//				temp = t[i][j];
-//				t[i][j] = t[k][j];
-//				t[k][j] = temp;
-//				// 伴随矩阵B也要进行行交换
-//				temp = b[i][j];
-//				b[i][j] = b[k][j];
-//				b[k][j] = temp;
-//			}
-//		}
-//		if (t[i][i] == 0)
-//		{
-//			printf( "\nthe matrix does not exist inverse matrix\n");
-//			break;
-//		}
-//		// 获取列主元素
-//		temp = t[i][i];
-//		// 将主元所在的行进行单位化处理
-//		//cout<<"\nthe temp is "<<temp<<endl;
-//		for (j = 0; j<N; j++)
-//		{
-//			t[i][j] = t[i][j] / temp;
-//			b[i][j] = b[i][j] / temp;
-//		}
-//		for (j = 0; j<N; j++)
-//		{
-//			if (j != i)
-//			{
-//				temp = t[j][i];
-//				//消去该列的其他元素
-//				for (k = 0; k<N; k++)
-//				{
-//					t[j][k] = t[j][k] - temp*t[i][k];
-//					b[j][k] = b[j][k] - temp*b[i][k];
-//				}
-//			}
-//
-//		}
-//
-//	}
-//}
+//求解3*3矩阵的逆
+void matrix_inverse(double a[N][N], double b[N][N])
+{
+	int i=0, j=0, k=0;
+	double max=0, temp=0;
+	// 定义一个临时矩阵t
+	double t[N][N];
+	// 将a矩阵临时存放在矩阵t[n][n]中
+	for (i = 0; i<N; i++)
+	{
+		for (j = 0; j<N; j++)
+		{
+			t[i][j] = a[i][j];
+		}
+	}
+	// 初始化B矩阵为单位矩阵
+	for (i = 0; i<N; i++)
+	{
+		for (j = 0; j<N; j++)
+		{
+			b[i][j] = (i == j) ? 1 : 0;//此处删除了1之前的（float）
+		}
+	}
+	// 进行列主消元，找到每一列的主元
+	for (i = 0; i<N; i++)
+	{
+		max = t[i][i];
+		// 用于记录每一列中的第几个元素为主元
+		k = i;
+		// 寻找每一列中的主元元素
+		for (j = i + 1; j<N; j++)
+		{
+			if (fabsf(t[j][i]) > fabsf(max))
+			{
+				max = t[j][i];
+				k = j;
+			}
+		}
+		//cout<<"the max number is "<<max<<endl;
+		// 如果主元所在的行不是第i行，则进行行交换
+		if (k != i)
+		{
+			// 进行行交换
+			for (j = 0; j<N; j++)
+			{
+				temp = t[i][j];
+				t[i][j] = t[k][j];
+				t[k][j] = temp;
+				// 伴随矩阵B也要进行行交换
+				temp = b[i][j];
+				b[i][j] = b[k][j];
+				b[k][j] = temp;
+			}
+		}
+		if (t[i][i] == 0)
+		{
+			printf( "\nthe matrix does not exist inverse matrix\n");
+			break;
+		}
+		// 获取列主元素
+		temp = t[i][i];
+		// 将主元所在的行进行单位化处理
+		//cout<<"\nthe temp is "<<temp<<endl;
+		for (j = 0; j<N; j++)
+		{
+			t[i][j] = t[i][j] / temp;
+			b[i][j] = b[i][j] / temp;
+		}
+		for (j = 0; j<N; j++)
+		{
+			if (j != i)
+			{
+				temp = t[j][i];
+				//消去该列的其他元素
+				for (k = 0; k<N; k++)
+				{
+					t[j][k] = t[j][k] - temp*t[i][k];
+					b[j][k] = b[j][k] - temp*b[i][k];
+				}
+			}
+
+		}
+
+	}
+}
 
 
 //主函数入口
