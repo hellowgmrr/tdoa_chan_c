@@ -10,7 +10,7 @@
 typedef struct MatrixStruct {
     unsigned char rows;
     unsigned char columns;
-    float elements[MAX_ELEMENTS];
+    double elements[MAX_ELEMENTS];
 } Matrix;
 
 // Function declarations
