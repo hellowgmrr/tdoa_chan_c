@@ -77,24 +77,25 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	//1)求矩阵转置
 	transposed(Ga,Ga_);
 	//2)求矩阵求逆inv(Q)
-	matrix_inverse( Q, Q_inver);
+	//matrix_inverse( Q, Q_inver);
+	matrix_inverse(Ga, Ga_);
 
 
-	/*for (i = 0; i < 3; i++)
+	for (i = 0; i < 3; i++)
+		for (j = 0; j < 3; j++)
+		{
+			printf("%f \n\n", Ga[i][j]);
+		}
+	for (i = 0; i < 3; i++)
 		for (j = 0; j < 3; j++)
 		{
 			printf("%f \n\n", Ga_[i][j]);
 		}
-	for (i = 0; i < 3; i++)
-		for (j = 0; j < 3; j++)
-		{
-			printf("%f \n\n", Q[i][j]);
-		}*/
-	for (i = 0; i < 3; i++)
+	/*for (i = 0; i < 3; i++)
 		for (j = 0; j < 3; j++)
 		{
 			printf("%f \n\n", Q_inver[i][j]);
-		}
+		}*/
 	//printf("%f", m);
 
 }
@@ -212,7 +213,7 @@ int main()
 	//运行chan算法
 	chan_2D_algrithm(number_of_anchor, anchor_position_, ai_2_tag_minus_a1_2_tag, tag_position_);
 	//输出运行后的tag坐标结果
-	printf("计算结果是X=%f Y=%f\n\n", tag_position_[0], tag_position_[1]);
+	printf("计算   9999结果是X=%f Y=%f\n\n", tag_position_[0], tag_position_[1]);
 	system("pause");
 	return 0;
 	
