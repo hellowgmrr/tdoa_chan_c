@@ -9,7 +9,7 @@
 void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  ai_2_tag_minus_a1_2_tag, double * tag_position);
 void transposed(double Ga[3][3], double(*Ga_)[3]);
 void matrix_inverse(double a[N][N], double b[N][N]);
-
+//测试一下是否保存正确===
 
 /*chan算法函数定义
 Arguments    : double num_of_anchor   -->anchor数量
