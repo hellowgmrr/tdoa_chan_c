@@ -1,9 +1,9 @@
 #ifndef invert2x2_c_h
 #define invert2x2_c_h
 
-static inline void invert2x2(const float * src, float * dst)
+static inline void invert2x2(const double * src, double* dst)
 {
-    float det;
+    double det;
 
     /* Compute adjoint: */
 

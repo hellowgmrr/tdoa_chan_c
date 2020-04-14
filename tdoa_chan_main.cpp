@@ -4,6 +4,7 @@
 #include<math.h>
 #include<matrixmul.h>
 #include<invert3x3_c.h>
+#include<invert2x2_c.h>
 //chanËã·¨º¯ÊýÉùÃ÷
 #define N 3
 void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  ai_2_tag_minus_a1_2_tag, double * tag_position);
@@ -383,8 +384,56 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	}
 	multiply(&sGa_m, &sFIm_invm, &sGa_msFIm_invmm);
 
-	for (i = 0; i <6; i++)
-		printf("%f \n\n", sGa_msFIm_invmm.elements[i]);
+	//sGa'*inv(sFI)*sGa
+	Matrix sGa_msFIm_invmmsGam;
+	sGa_msFIm_invmmsGam.columns = 3;
+	sGa_msFIm_invmmsGam.rows = 2;
+	for (i = 0; i < 4; i++)
+	{
+		sGa_msFIm_invmmsGam.elements[i] = 0;
+	}
+	multiply(&sGa_msFIm_invmm, &sGam, &sGa_msFIm_invmmsGam);
+	//inv(sGa'*inv(sFI)*sGa)
+	Matrix sGa_msFIm_invmmsGam_invm;
+	sGa_msFIm_invmmsGam_invm.columns = 2;
+	sGa_msFIm_invmmsGam_invm.rows = 2;
+	for (i = 0; i < 4; i++)
+	{
+		sGa_msFIm_invmmsGam_invm.elements[i] = 0;
+	}
+	invert2x2(sGa_msFIm_invmmsGam.elements, sGa_msFIm_invmmsGam_invm.elements);
+	//inv(sGa'*inv(sFI)*sGa)*sGa'
+	Matrix sGa_msFIm_invmmsGam_invmsGa_m;
+	sGa_msFIm_invmmsGam_invmsGa_m.columns = 3;
+	sGa_msFIm_invmmsGam_invmsGa_m.rows = 2;
+	for (i = 0; i < 4; i++)
+	{
+		sGa_msFIm_invmmsGam_invmsGa_m.elements[i] = 0;
+	}
+	multiply(&sGa_msFIm_invmmsGam_invm, &sGa_m, &sGa_msFIm_invmmsGam_invmsGa_m);
+	//inv(sGa'*inv(sFI)*sGa)*sGa'*inv(sFI)
+	Matrix sGa_msFIm_invmmsGam_invmsGa_minvsFIm;
+	sGa_msFIm_invmmsGam_invmsGa_minvsFIm.columns = 3;
+	sGa_msFIm_invmmsGam_invmsGa_minvsFIm.rows = 2;
+	for (i = 0; i < 4; i++)
+	{
+		sGa_msFIm_invmmsGam_invmsGa_minvsFIm.elements[i] = 0;
+	}
+	multiply(&sGa_msFIm_invmmsGam_invmsGa_m, &sFIm_invm, &sGa_msFIm_invmmsGam_invmsGa_minvsFIm);
+
+//Za2 = inv(sGa'*inv(sFI)*sGa)*sGa'*inv(sFI)*sh
+	Matrix Za2;
+	Za2.columns = 1;
+	Za2.rows = 2;
+	for (i = 0; i < 2; i++)
+	{
+		Za2.elements[i] = 0;
+	}
+	multiply(&sGa_msFIm_invmmsGam_invmsGa_minvsFIm, &shm, &Za2);
+	//Za = sqrt(abs(Za2));
+
+	for (i = 0; i <2; i++)
+		printf("%f \n\n", Za2.elements[i]);
 	
 	//for (i = 0; i < 9; i++)
 	//	printf("%d %d %f \n\n", FIm.columns, FIm.rows, FIm.elements[i]);

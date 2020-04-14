@@ -150,6 +150,7 @@
     <ClCompile Include="..\tdoa_chan_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\invert2x2_c.h" />
     <ClInclude Include="..\invert3x3_c.h" />
     <ClInclude Include="..\matrixmul.h" />
   </ItemGroup>

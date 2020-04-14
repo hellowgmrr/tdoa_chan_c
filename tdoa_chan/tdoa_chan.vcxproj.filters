@@ -26,5 +26,8 @@
     <ClInclude Include="..\invert3x3_c.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\invert2x2_c.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
