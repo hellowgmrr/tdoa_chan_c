@@ -172,15 +172,62 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	for i = 1: num_of_anchor - 1
 		B(i, i) = sqrt((anchor_position(1, i + 1) - Za0(1)) ^ 2 + (anchor_position(2, i + 1) - Za0(2)) ^ 2);
 	end*/
+	double C[9] = { 0,0,0,0,0,0,0,0,0 };
+	double B[9] = { 0,0,0,0,0,0,0,0,0 };
+	for (i = 0; i < 3; i++)
+	{
+		C[i] = sqrt(pow(anchor_position[2 * i + 2] - Za0.elements[0], 2) + pow(anchor_position[2 * i + 3] - Za0.elements[1], 2));
+	}
+	k = 0;
+	for (i = 0; i < 3; i++)
+	{
+			B[k] = C[i];
+			k = k + 4;
+	}
 
+	//FI = B * Q * B;
+	Matrix Bm;
+	Bm.columns = 3;
+	Bm.rows = 3;
+	for (i = 0; i < 9; i++)
+		Bm.elements[i] = B[i];
 
+	Matrix Qm;
+	Qm.columns = 3;
+	Qm.rows = 3;
+	for (i = 0; i < 9; i++)
+		Qm.elements[i] = Q[i];
 
-	for (i = 0; i <3 ; i++)
-		printf("%d %d %f \n\n", Za0.columns, Za0.rows, Za0.elements[i]);
+	Matrix BmQm;
+	BmQm.columns = 3;
+	BmQm.rows = 3;
+	for (i = 0; i < 9; i++)
+		BmQm.elements[i] = 0;
+
+	multiply(&Bm, &Qm, &BmQm);
+
+	Matrix FIm;
+	FIm.columns = 3;
+	FIm.rows = 3;
+	for (i = 0; i < 9; i++)
+		FIm.elements[i] = 0;
+
+	multiply(&BmQm, &Bm, &FIm);
+
+	//Za1 = inv(Ga'*inv(FI)*Ga)*Ga'*inv(FI)*h';%£¨14a£©
+	//ÏÈÇóinv£¨FI£©
+	double FI[9] = { 0 };
+	invert3x3(FIm.elements, FI);
+	//Ga'*inv(FI)
+
 	
-	/*for (i = 0; i < 9; i++)
-		printf("%d %d %f \n\n", Ga_mQinv_mGam_inv_mGa_Qinv.columns, Ga_mQinv_mGam_inv_mGa_Qinv.rows, Ga_mQinv_mGam_inv_mGa_Qinv.elements[i]);
-	*/
+	
+	for (i = 0; i <9 ; i++)
+		printf("%f \n\n", FI[i]);                                                                                                                                                                                                                                                                                                                                                                                                                          
+	
+	//for (i = 0; i < 9; i++)
+	//	printf("%d %d %f \n\n", FIm.columns, FIm.rows, FIm.elements[i]);
+	//
 
 	//for (i = 0; i < 3; i++)
 	//	for (j = 0; j < 3; j++)
