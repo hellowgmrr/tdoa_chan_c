@@ -220,6 +220,7 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	invert3x3(FIm.elements, FI);
 	//Ga'*inv(FI)
 
+
 	
 	
 	for (i = 0; i <9 ; i++)
