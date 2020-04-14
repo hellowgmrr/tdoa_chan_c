@@ -284,10 +284,38 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 		Za1.elements[2] = -Za1.elements[2];
 
 	//   CovZa = inv(Ga'*inv(FI)*Ga);
+	Matrix CovZa= Ga_FI_invmGam_invm;
 
+	//sB = eye(3);
+	//sB(1, 1) = Za1(1) - anchor_position(1, 1);
+	//sB(2, 2) = Za1(2) - anchor_position(2, 1);
+	//sB(3, 3) = Za1(3);
+	Matrix sB;
+	sB.columns = 3;
+	sB.rows = 3;
+	for (i = 0; i < 9; i++)
+	{
+		sB.elements[i] = 0;
+	}
+	sB.elements[0] = Za1.elements[0] - anchor_position[0];
+	sB.elements[4] = Za1.elements[1] - anchor_position[1];
+	sB.elements[8] = Za1.elements[2] ;
 
+	//sFI = 4 * sB * CovZa * sB;
+	// 4 * sB
+	for (i = 0; i < 9; i++)
+		sB.elements[i] = 4 * sB.elements[i];
+	//4 * sB * CovZa
+	Matrix sBCovZam;
+	sBCovZam.columns = 3;
+	sBCovZam.rows = 3;
+	for (i = 0; i < 9; i++)
+	{
+		sBCovZam.elements[i] = 0;
+	}
+	multiply(&sB, &CovZa, &sBCovZam);
 	for (i = 0; i <9 ; i++)
-		printf("%f \n\n", Za1.elements[i]);
+		printf("%f \n\n", sBCovZam.elements[i]);
 	
 	//for (i = 0; i < 9; i++)
 	//	printf("%d %d %f \n\n", FIm.columns, FIm.rows, FIm.elements[i]);
