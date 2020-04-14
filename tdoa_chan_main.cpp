@@ -245,9 +245,49 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	invert3x3(Ga_FI_invmGam.elements, Ga_FI_invmGam_inv);
 
 	//inv(Ga'*inv(FI)*Ga)*Ga'
+	Matrix Ga_FI_invmGam_invm;
+	Ga_FI_invmGam_invm.columns = 3;
+	Ga_FI_invmGam_invm.rows = 3;
+	for (i = 0; i < 9; i++)
+		Ga_FI_invmGam_invm.elements[i] = Ga_FI_invmGam_inv[i];
+
+	Matrix Ga_FI_invmGam_invmGa_m;
+	Ga_FI_invmGam_invmGa_m.columns = 3;
+	Ga_FI_invmGam_invmGa_m.rows = 3;
+	for (i = 0; i < 9; i++)
+		Ga_FI_invmGam_invmGa_m.elements[i] = 0;
+
+	multiply(&Ga_FI_invmGam_invm, &Ga_m, &Ga_FI_invmGam_invmGa_m);
+
+	//inv(Ga'*inv(FI)*Ga)*Ga'*inv(FI)
+	Matrix Ga_FI_invmGam_invmGa_mFI_invm;
+	Ga_FI_invmGam_invmGa_mFI_invm.columns = 3;
+	Ga_FI_invmGam_invmGa_mFI_invm.rows = 3;
+	for (i = 0; i < 9; i++)
+		Ga_FI_invmGam_invmGa_mFI_invm.elements[i] = 0;
+
+	multiply(&Ga_FI_invmGam_invmGa_m, &FI_invm, &Ga_FI_invmGam_invmGa_mFI_invm);
+
+	//Za1 = inv(Ga'*inv(FI)*Ga)*Ga'*inv(FI)*h';
+	Matrix Za1;
+	Za1.columns = 3;
+	Za1.rows = 3;
+	for (i = 0; i < 9; i++)
+		Za1.elements[i] = 0;
+
+	multiply(&Ga_FI_invmGam_invmGa_mFI_invm, &hm, &Za1);
+
+	//if Za1(3) < 0 % 此处需要理解一下这的判别条件
+	//	Za1(3) = abs(Za1(3));
+	//end
+	if (Za1.elements[2] < 0)
+		Za1.elements[2] = -Za1.elements[2];
+
+	//   CovZa = inv(Ga'*inv(FI)*Ga);
+
 
 	for (i = 0; i <9 ; i++)
-		printf("%f \n\n", Ga_FI_invmGam_inv[i]);
+		printf("%f \n\n", Za1.elements[i]);
 	
 	//for (i = 0; i < 9; i++)
 	//	printf("%d %d %f \n\n", FIm.columns, FIm.rows, FIm.elements[i]);
