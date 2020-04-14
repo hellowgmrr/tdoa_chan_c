@@ -8,7 +8,7 @@
 #define N 3
 void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  ai_2_tag_minus_a1_2_tag, double * tag_position);
 void transposed(double Ga[3][3], double(*Ga_)[3]);
-void matrix_inverse(double a[N][N], double b[N][N]);
+//void matrix_inverse(double a[N][N], double b[N][N]);
 //测试一下是否保存正确===
 
 /*chan算法函数定义
@@ -108,7 +108,7 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	Ga_Qinv_m.rows = 3;
 	for (i = 0; i < 9; i++)
 			Ga_Qinv_m.elements[i] =0;
-
+	//Ga'*inv(Q)
 	multiply(&Ga_m, &Q_inver_m, &Ga_Qinv_m);
 
 	Matrix Gam;
@@ -126,7 +126,7 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	Ga_mQinv_mGam.rows = 3;
 	for (i = 0; i < 9; i++)
 		Ga_mQinv_mGam.elements[i] = 0;
-		
+	//Ga'*inv(Q)*Ga	
 	multiply(&Ga_Qinv_m,&Gam, &Ga_mQinv_mGam);
 	
 	double Ga_mQinv_mGam_inv[9] = {0};
@@ -143,7 +143,7 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	Ga_mQinv_mGam_inv_mGa_.rows = 3;
 	for (i = 0; i < 9; i++)
 			Ga_mQinv_mGam_inv_mGa_.elements[i] = 0;
-
+	//inv(Ga'*inv(Q)*Ga)*Ga'
 	multiply(&Ga_mQinv_mGam_inv_m, &Ga_m, &Ga_mQinv_mGam_inv_mGa_);
 
 	Matrix Ga_mQinv_mGam_inv_mGa_Qinv;
@@ -151,7 +151,7 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	Ga_mQinv_mGam_inv_mGa_Qinv.rows = 3;
 	for (i = 0; i < 9; i++)
 		Ga_mQinv_mGam_inv_mGa_Qinv.elements[i] = 0;
-
+	//inv(Ga'*inv(Q)*Ga)*Ga'*inv(Q)
 	multiply(&Ga_mQinv_mGam_inv_mGa_, &Q_inver_m, &Ga_mQinv_mGam_inv_mGa_Qinv);
 
 	Matrix hm;
@@ -165,9 +165,13 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	Za0.rows = 3;
 	for (i = 0; i < 3; i++)
 		Za0.elements[i] = 0;
-
+	//Za0 = inv(Ga'*inv(Q)*Ga)*Ga'*inv(Q)*h'
 	multiply(&Ga_mQinv_mGam_inv_mGa_Qinv, &hm, &Za0);
 
+	/*B = eye(num_of_anchor - 1);
+	for i = 1: num_of_anchor - 1
+		B(i, i) = sqrt((anchor_position(1, i + 1) - Za0(1)) ^ 2 + (anchor_position(2, i + 1) - Za0(2)) ^ 2);
+	end*/
 
 
 

@@ -147,7 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\tdoa_chan_main.cpp" />
+    <ClCompile Include="..\tdoa_chan_main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\invert3x3_c.h" />

@@ -16,8 +16,8 @@ typedef struct MatrixStruct {
 // Function declarations
 
 void setRowsColumns(unsigned char rows, unsigned char columns, Matrix *);
-void setElement(unsigned char row, unsigned char column, float element, Matrix *);
-float getElement(unsigned char row, unsigned char column, Matrix *);
+void setElement(unsigned char row, unsigned char column, double element, Matrix *);
+double getElement(unsigned char row, unsigned char column, Matrix *);
 void clearMatrix(Matrix *);
 int multiply(Matrix *matrixA, Matrix *matrixB, Matrix *matrixC);
 
@@ -31,14 +31,14 @@ void setRowsColumns(unsigned char rows, unsigned char columns, Matrix *matrix) {
     return;
 }
 
-void setElement(unsigned char row, unsigned char column, float element, Matrix *matrix) {
+void setElement(unsigned char row, unsigned char column, double element, Matrix *matrix) {
 
     matrix->elements[(row - 1) * matrix->columns + (column - 1)] = element;
 
     return;
 }
 
-float getElement(unsigned char row, unsigned char column, Matrix *matrix) {
+double getElement(unsigned char row, unsigned char column, Matrix *matrix) {
     return matrix->elements[(row - 1) * matrix->columns + (column - 1)];
 }
 

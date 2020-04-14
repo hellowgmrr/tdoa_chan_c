@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\tdoa_chan_main.cpp">
+    <ClCompile Include="..\tdoa_chan_main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
