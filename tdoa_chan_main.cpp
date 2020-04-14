@@ -354,9 +354,37 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	shm.elements[2] = pow(Za1.elements[2] , 2);
 
 	// Za2 = inv(sGa'*inv(sFI)*sGa)*sGa'*inv(sFI)*sh;%这个是论文当中的（22a）
+	//inv(sFI)  
+	Matrix sFIm_invm;
+	sFIm_invm.columns = 3;
+	sFIm_invm.rows = 3;
+	for (i = 0; i < 9; i++)
+	{
+		sFIm_invm.elements[i] = 0;
+	}
+	invert3x3(sFIm.elements, sFIm_invm.elements);
+	//sGa'
+	Matrix sGa_m;
+	sGa_m.columns = 3;
+	sGa_m.rows = 2;
+	for (i = 0; i < 6; i++)
+	{
+		sGa_m.elements[i] = 1;
+	}
+	sGa_m.elements[1] = 0;
+	sGa_m.elements[3] = 0;
+	//sGa'*inv(sFI)
+	Matrix sGa_msFIm_invmm;
+	sGa_msFIm_invmm.columns = 3;
+	sGa_msFIm_invmm.rows = 2;
+	for (i = 0; i < 3; i++)
+	{
+		sGa_msFIm_invmm.elements[i] = 0;
+	}
+	multiply(&sGa_m, &sFIm_invm, &sGa_msFIm_invmm);
 
-	for (i = 0; i <3; i++)
-		printf("%f \n\n", shm.elements[i]);
+	for (i = 0; i <6; i++)
+		printf("%f \n\n", sGa_msFIm_invmm.elements[i]);
 	
 	//for (i = 0; i < 9; i++)
 	//	printf("%d %d %f \n\n", FIm.columns, FIm.rows, FIm.elements[i]);
