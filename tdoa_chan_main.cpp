@@ -353,7 +353,6 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	shm.elements[1] = pow(Za1.elements[1] - anchor_position[1], 2);
 	shm.elements[2] = pow(Za1.elements[2] , 2);
 
-
 	for (i = 0; i <3; i++)
 		printf("%f \n\n", shm.elements[i]);
 	
