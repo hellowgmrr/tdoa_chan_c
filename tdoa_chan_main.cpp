@@ -301,21 +301,61 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	sB.elements[4] = Za1.elements[1] - anchor_position[1];
 	sB.elements[8] = Za1.elements[2] ;
 
+	Matrix fourtimessB;
+	fourtimessB.columns = 3;
+	fourtimessB.rows = 3;
+	for (i = 0; i < 9; i++)
+		fourtimessB.elements[i] = 0;
 	//sFI = 4 * sB * CovZa * sB;
 	// 4 * sB
 	for (i = 0; i < 9; i++)
-		sB.elements[i] = 4 * sB.elements[i];
+		fourtimessB.elements[i] = 4 * sB.elements[i];
 	//4 * sB * CovZa
-	Matrix sBCovZam;
-	sBCovZam.columns = 3;
-	sBCovZam.rows = 3;
+	Matrix fourtimessBCovZam;
+	fourtimessBCovZam.columns = 3;
+	fourtimessBCovZam.rows = 3;
 	for (i = 0; i < 9; i++)
 	{
-		sBCovZam.elements[i] = 0;
+		fourtimessBCovZam.elements[i] = 0;
 	}
-	multiply(&sB, &CovZa, &sBCovZam);
-	for (i = 0; i <9 ; i++)
-		printf("%f \n\n", sBCovZam.elements[i]);
+	multiply(&fourtimessB, &CovZa, &fourtimessBCovZam);
+
+	Matrix sFIm;
+	sFIm.columns = 3;
+	sFIm.rows = 3;
+	for (i = 0; i < 9; i++)
+	{
+		sFIm.elements[i] = 0;
+	}
+	//sFI =;
+	multiply(&fourtimessBCovZam, &sB, &sFIm);
+
+	//sGa = [1, 0; 0, 1; 1, 1];
+	Matrix sGam;
+	sGam.columns = 2;
+	sGam.rows = 3;
+	for (i = 0; i < 6; i++)
+	{
+		sGam.elements[i] = 1;
+	}
+	sGam.elements[1] = 0;
+	sGam.elements[2] = 0;
+
+	//    sh  = [(Za1(1)-anchor_position(1, 1))^2; (Za1(2)-anchor_position(2, 1))^2; Za1(3)^2];%x1,y1,在此处也进行了运算；
+	Matrix shm;
+	shm.columns = 1;
+	shm.rows = 3;
+	for (i = 0; i < 3; i++)
+	{
+		shm.elements[i] = 0;
+	}
+	shm.elements[0] = pow(Za1.elements[0] - anchor_position[0], 2);
+	shm.elements[1] = pow(Za1.elements[1] - anchor_position[1], 2);
+	shm.elements[2] = pow(Za1.elements[2] , 2);
+
+
+	for (i = 0; i <3; i++)
+		printf("%f \n\n", shm.elements[i]);
 	
 	//for (i = 0; i < 9; i++)
 	//	printf("%d %d %f \n\n", FIm.columns, FIm.rows, FIm.elements[i]);
