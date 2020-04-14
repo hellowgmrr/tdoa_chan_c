@@ -216,15 +216,38 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 
 	//Za1 = inv(Ga'*inv(FI)*Ga)*Ga'*inv(FI)*h';%£®14a£©
 	//œ»«Ûinv£®FI£©
-	double FI[9] = { 0 };
-	invert3x3(FIm.elements, FI);
+	double FI_inv[9] = { 0 };
+	invert3x3(FIm.elements, FI_inv);
 	//Ga'*inv(FI)
+	Matrix FI_invm;
+	FI_invm.columns = 3;
+	FI_invm.rows = 3;
+	for (i = 0; i < 9; i++)
+		FI_invm.elements[i] = FI_inv[i];
 
+	Matrix Ga_FI_invm;
+	Ga_FI_invm.columns = 3;
+	Ga_FI_invm.rows = 3;
+	for (i = 0; i < 9; i++)
+		Ga_FI_invm.elements[i] = 0;
+	multiply(&Ga_m, &FI_invm, &Ga_FI_invm);
 
-	
-	
+	//Ga'*inv(FI)*Ga
+	Matrix Ga_FI_invmGam;
+	Ga_FI_invmGam.columns = 3;
+	Ga_FI_invmGam.rows = 3;
+	for (i = 0; i < 9; i++)
+		Ga_FI_invmGam.elements[i] = 0;
+	multiply(&Ga_FI_invm, &Gam, &Ga_FI_invmGam);
+
+	//inv(Ga'*inv(FI)*Ga)
+	double Ga_FI_invmGam_inv[9] = { 0 };
+	invert3x3(Ga_FI_invmGam.elements, Ga_FI_invmGam_inv);
+
+	//inv(Ga'*inv(FI)*Ga)*Ga'
+
 	for (i = 0; i <9 ; i++)
-		printf("%f \n\n", FI[i]);                                                                                                                                                                                                                                                                                                                                                                                                                          
+		printf("%f \n\n", Ga_FI_invmGam_inv[i]);
 	
 	//for (i = 0; i < 9; i++)
 	//	printf("%d %d %f \n\n", FIm.columns, FIm.rows, FIm.elements[i]);
