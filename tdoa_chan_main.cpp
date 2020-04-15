@@ -431,9 +431,26 @@ void chan_2D_algrithm(int number_of_anchor, double * anchor_position, double *  
 	}
 	multiply(&sGa_msFIm_invmmsGam_invmsGa_minvsFIm, &shm, &Za2);
 	//Za = sqrt(abs(Za2));
+	Matrix Za;
+	Za.columns = 1;
+	Za.rows = 2;
+	for (i = 0; i < 2; i++)
+	{
+		Za.elements[i] = sqrt(abs(Za2.elements[i]));
+	}
+
+	// reout(1)=anchor_position(1, 1);
+	//reout(2) = anchor_position(2, 1);
+	//out = abs(Za) + reout;
+	tag_position[0] = abs(Za.elements[0]) + anchor_position[0];
+	tag_position[1] = abs(Za.elements[1]) + anchor_position[1];
+	if(Za1.elements[0]< anchor_position[0])
+		tag_position[0] = -abs(Za.elements[0]) + anchor_position[0];
+	if (Za1.elements[1] < anchor_position[1])
+		tag_position[1] = -abs(Za.elements[1]) + anchor_position[1];
 
 	for (i = 0; i <2; i++)
-		printf("%f \n\n", Za2.elements[i]);
+		printf("%f \n\n", tag_position[i]);
 	
 	//for (i = 0; i < 9; i++)
 	//	printf("%d %d %f \n\n", FIm.columns, FIm.rows, FIm.elements[i]);
