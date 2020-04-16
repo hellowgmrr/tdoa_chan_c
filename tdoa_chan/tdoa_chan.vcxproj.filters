@@ -29,5 +29,11 @@
     <ClInclude Include="..\invert2x2_c.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="transposed.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\chan_2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

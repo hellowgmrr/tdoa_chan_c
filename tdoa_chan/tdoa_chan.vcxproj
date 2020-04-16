@@ -150,9 +150,11 @@
     <ClCompile Include="..\tdoa_chan_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\chan_2D.h" />
     <ClInclude Include="..\invert2x2_c.h" />
     <ClInclude Include="..\invert3x3_c.h" />
     <ClInclude Include="..\matrixmul.h" />
+    <ClInclude Include="transposed.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
