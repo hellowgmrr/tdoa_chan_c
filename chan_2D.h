@@ -20,19 +20,13 @@ Arguments    : double num_of_anchor   -->anchor数量
 */
 void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_2_tag_minus_a1_2_tag, double* tag_position)
 {
-	/*tag_position[0]= 1;
-	tag_position[1] = 15;
-	*/
 	int i = 0, j = 0, k = 0;//计数用
-	/*double Q[3][3] = { { 1, 0.5, 0.5 },{ 0.5, 1, 0.5 },{ 0.5, 0.5, 1 } };
-	double Q_inver[3][3] = { { 0,0,0 },{ 0,0,0 },{ 0,0,0 } };*/
 	double Q[9] = { 1, 0.5, 0.5 , 0.5, 1, 0.5 , 0.5, 0.5,1 };
 	double Q_inver[9] = { 0,0,0,0,0,0,0,0,0 };
 	double Ga[3][3] = { { 0,0,0 },{ 0,0,0 },{ 0,0,0 } };
 	double Anchor_pos[2][4] = { { 0,0,0,0 },{ 0,0,0,0 } };
 	double h[3] = { 0,0,0 };
 	double Ga_[3][3] = { { 0,0,0 },{ 0,0,0 },{ 0,0,0 } };
-	//double Ga_Qinv[3][3] = { { 0,0,0 },{ 0,0,0 },{ 0,0,0 } };
 	//将输入的anchor坐标由一维数组转换为二维数组，方便后续使用
 	for (i = 0; i < 4; i++)
 	{
@@ -48,10 +42,7 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	end*/
 	double K[3] = { 0,0,0 };
 	for (i = 0; i < 3; ++i)
-	{
 		K[i] = pow(anchor_position[i * 2 + 2], 2) + pow(anchor_position[i * 2 + 3], 2);
-
-	}
 
 	/*for i = 1: num_of_anchor - 1
 	Ga(i, 1) = -(anchor_position(1, i + 1) - anchor_position(1, 1));
@@ -69,9 +60,7 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	h(i) = 0.5*(R(i) ^ 2 - K(i) + m);
 	end*/
 	for (i = 0; i < 3; i++)
-	{
 		h[i] = 0.5 * (pow(ai_2_tag_minus_a1_2_tag[i], 2) - K[i] + m);
-	}
 
 	/*Za0 = inv(Ga'*inv(Q)*Ga)*Ga'*inv(Q)*h';%(14b）*/
 	//将上述步骤拆解开来一步步实现：1）求矩阵转置； 2）矩阵求逆； 3）矩阵相乘求解
@@ -89,9 +78,7 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	k = 0;
 	for (i = 0; i < 3; i++)
 		for (j = 0; j < 3; j++)
-		{
 			Ga_m.elements[k++] = Ga_[i][j];
-		}
 
 	Matrix Q_inver_m;
 	Q_inver_m.columns = 3;
@@ -113,9 +100,7 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	k = 0;
 	for (i = 0; i < 3; i++)
 		for (j = 0; j < 3; j++)
-		{
 			Gam.elements[k++] = Ga[i][j];
-		}
 
 	Matrix Ga_mQinv_mGam;
 	Ga_mQinv_mGam.columns = 3;
@@ -171,9 +156,7 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	double C[9] = { 0,0,0,0,0,0,0,0,0 };
 	double B[9] = { 0,0,0,0,0,0,0,0,0 };
 	for (i = 0; i < 3; i++)
-	{
 		C[i] = sqrt(pow(anchor_position[2 * i + 2] - Za0.elements[0], 2) + pow(anchor_position[2 * i + 3] - Za0.elements[1], 2));
-	}
 	k = 0;
 	for (i = 0; i < 3; i++)
 	{
@@ -290,9 +273,7 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	sB.columns = 3;
 	sB.rows = 3;
 	for (i = 0; i < 9; i++)
-	{
 		sB.elements[i] = 0;
-	}
 	sB.elements[0] = Za1.elements[0] - anchor_position[0];
 	sB.elements[4] = Za1.elements[1] - anchor_position[1];
 	sB.elements[8] = Za1.elements[2];
@@ -311,18 +292,16 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	fourtimessBCovZam.columns = 3;
 	fourtimessBCovZam.rows = 3;
 	for (i = 0; i < 9; i++)
-	{
 		fourtimessBCovZam.elements[i] = 0;
-	}
+
 	multiply(&fourtimessB, &CovZa, &fourtimessBCovZam);
 
 	Matrix sFIm;
 	sFIm.columns = 3;
 	sFIm.rows = 3;
 	for (i = 0; i < 9; i++)
-	{
 		sFIm.elements[i] = 0;
-	}
+
 	//sFI =;
 	multiply(&fourtimessBCovZam, &sB, &sFIm);
 
@@ -331,9 +310,7 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	sGam.columns = 2;
 	sGam.rows = 3;
 	for (i = 0; i < 6; i++)
-	{
 		sGam.elements[i] = 1;
-	}
 	sGam.elements[1] = 0;
 	sGam.elements[2] = 0;
 
@@ -342,9 +319,7 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	shm.columns = 1;
 	shm.rows = 3;
 	for (i = 0; i < 3; i++)
-	{
 		shm.elements[i] = 0;
-	}
 	shm.elements[0] = pow(Za1.elements[0] - anchor_position[0], 2);
 	shm.elements[1] = pow(Za1.elements[1] - anchor_position[1], 2);
 	shm.elements[2] = pow(Za1.elements[2], 2);
@@ -355,18 +330,15 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	sFIm_invm.columns = 3;
 	sFIm_invm.rows = 3;
 	for (i = 0; i < 9; i++)
-	{
 		sFIm_invm.elements[i] = 0;
-	}
+
 	invert3x3(sFIm.elements, sFIm_invm.elements);
 	//sGa'
 	Matrix sGa_m;
 	sGa_m.columns = 3;
 	sGa_m.rows = 2;
 	for (i = 0; i < 6; i++)
-	{
 		sGa_m.elements[i] = 1;
-	}
 	sGa_m.elements[1] = 0;
 	sGa_m.elements[3] = 0;
 	//sGa'*inv(sFI)
@@ -374,9 +346,7 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	sGa_msFIm_invmm.columns = 3;
 	sGa_msFIm_invmm.rows = 2;
 	for (i = 0; i < 3; i++)
-	{
 		sGa_msFIm_invmm.elements[i] = 0;
-	}
 	multiply(&sGa_m, &sFIm_invm, &sGa_msFIm_invmm);
 
 	//sGa'*inv(sFI)*sGa
@@ -384,36 +354,28 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	sGa_msFIm_invmmsGam.columns = 3;
 	sGa_msFIm_invmmsGam.rows = 2;
 	for (i = 0; i < 4; i++)
-	{
 		sGa_msFIm_invmmsGam.elements[i] = 0;
-	}
 	multiply(&sGa_msFIm_invmm, &sGam, &sGa_msFIm_invmmsGam);
 	//inv(sGa'*inv(sFI)*sGa)
 	Matrix sGa_msFIm_invmmsGam_invm;
 	sGa_msFIm_invmmsGam_invm.columns = 2;
 	sGa_msFIm_invmmsGam_invm.rows = 2;
 	for (i = 0; i < 4; i++)
-	{
 		sGa_msFIm_invmmsGam_invm.elements[i] = 0;
-	}
 	invert2x2(sGa_msFIm_invmmsGam.elements, sGa_msFIm_invmmsGam_invm.elements);
 	//inv(sGa'*inv(sFI)*sGa)*sGa'
 	Matrix sGa_msFIm_invmmsGam_invmsGa_m;
 	sGa_msFIm_invmmsGam_invmsGa_m.columns = 3;
 	sGa_msFIm_invmmsGam_invmsGa_m.rows = 2;
 	for (i = 0; i < 4; i++)
-	{
 		sGa_msFIm_invmmsGam_invmsGa_m.elements[i] = 0;
-	}
 	multiply(&sGa_msFIm_invmmsGam_invm, &sGa_m, &sGa_msFIm_invmmsGam_invmsGa_m);
 	//inv(sGa'*inv(sFI)*sGa)*sGa'*inv(sFI)
 	Matrix sGa_msFIm_invmmsGam_invmsGa_minvsFIm;
 	sGa_msFIm_invmmsGam_invmsGa_minvsFIm.columns = 3;
 	sGa_msFIm_invmmsGam_invmsGa_minvsFIm.rows = 2;
 	for (i = 0; i < 4; i++)
-	{
 		sGa_msFIm_invmmsGam_invmsGa_minvsFIm.elements[i] = 0;
-	}
 	multiply(&sGa_msFIm_invmmsGam_invmsGa_m, &sFIm_invm, &sGa_msFIm_invmmsGam_invmsGa_minvsFIm);
 
 	//Za2 = inv(sGa'*inv(sFI)*sGa)*sGa'*inv(sFI)*sh
@@ -421,18 +383,14 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	Za2.columns = 1;
 	Za2.rows = 2;
 	for (i = 0; i < 2; i++)
-	{
 		Za2.elements[i] = 0;
-	}
 	multiply(&sGa_msFIm_invmmsGam_invmsGa_minvsFIm, &shm, &Za2);
 	//Za = sqrt(abs(Za2));
 	Matrix Za;
 	Za.columns = 1;
 	Za.rows = 2;
 	for (i = 0; i < 2; i++)
-	{
 		Za.elements[i] = sqrt(abs(Za2.elements[i]));
-	}
 
 	// reout(1)=anchor_position(1, 1);
 	//reout(2) = anchor_position(2, 1);
