@@ -7,7 +7,6 @@
 int main()
 {
 	//定义chan算法所需参数，各参数含义如其名所述
-	int number_of_anchor = 4;
 	double anchor_position_[8] = { 2,10,10,20,25,0,30,20 };
 	double ai_2_tag_minus_a1_2_tag[3] = { 2.81024967,19.41311123,20.70992026 };
 	double tag_position_[2] = { 0,0 };

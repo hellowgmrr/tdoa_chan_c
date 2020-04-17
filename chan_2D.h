@@ -8,7 +8,7 @@
 #include<stdio.h>
 
 /*chan算法函数定义
-Arguments    : double num_of_anchor   -->anchor数量
+Arguments    :
 *                const double anchor_position[8]-->anchor坐标，此处用了4个anchor，输入数据时，依次输入{x1,y1,x2,y2,x3,y3,x4,y4}
 *                const double ai_2_tag_minus_a1_2_tag
 -->ai_2_tag_minus_a1_2_tag[0]:anchor2与tag距离  与   anchor1与tag距离 之差
