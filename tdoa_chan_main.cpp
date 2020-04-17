@@ -13,7 +13,7 @@ int main()
 	double tag_position_[2] = { 0,0 };
 
 	//运行chan算法
-	chan_2D_algrithm(number_of_anchor, anchor_position_, ai_2_tag_minus_a1_2_tag, tag_position_);
+	chan_2D_algrithm( anchor_position_, ai_2_tag_minus_a1_2_tag, tag_position_);
 
 	//输出运行后的tag坐标结果
 	printf("计算结果是X=%f Y=%f\n\n", tag_position_[0], tag_position_[1]);

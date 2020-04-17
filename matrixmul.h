@@ -73,4 +73,15 @@ int multiply(Matrix *matrixA, Matrix *matrixB, Matrix *matrixC) {
     return 0;
 }
 
+//transposed
+int transposed_v2(Matrix* matrixA, Matrix* matrixB) {
+
+    for (int i = 1; i <= matrixA->rows; i++) {
+        for (int j = 1; j <= matrixA->columns; j++) {
+                setElement(j, i, getElement(i, j, matrixA) , matrixB);
+        }
+    }
+
+    return 0;
+}
 #endif

@@ -18,7 +18,7 @@ Arguments    : double num_of_anchor   -->anchor数量
 *                double tag_position[2]  -->输出tag经过chan算法求得的坐标
 * Return Type  : void
 */
-void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_2_tag_minus_a1_2_tag, double* tag_position)
+void chan_2D_algrithm(double* anchor_position, double* ai_2_tag_minus_a1_2_tag, double* tag_position)
 {
 	int i = 0, j = 0, k = 0;//计数用
 	double Q[9] = { 1, 0.5, 0.5 , 0.5, 1, 0.5 , 0.5, 0.5,1 };
@@ -54,7 +54,7 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 		Ga[i][0] = -(Anchor_pos[0][i + 1] - Anchor_pos[0][0]);
 		Ga[i][1] = -(Anchor_pos[1][i + 1] - Anchor_pos[1][0]);
 		Ga[i][2] = -ai_2_tag_minus_a1_2_tag[i];
-	}
+	}/////////////////////
 
 	/*for i = 1: num_of_anchor - 1
 	h(i) = 0.5*(R(i) ^ 2 - K(i) + m);
@@ -65,7 +65,7 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	/*Za0 = inv(Ga'*inv(Q)*Ga)*Ga'*inv(Q)*h';%(14b）*/
 	//将上述步骤拆解开来一步步实现：1）求矩阵转置； 2）矩阵求逆； 3）矩阵相乘求解
 	//1)求矩阵转置
-	transposed(Ga, Ga_);
+	transposed(Ga, Ga_);/////////////
 
 	//2)求矩阵求逆inv(Q)
 	invert3x3(Q, Q_inver);
@@ -78,7 +78,7 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	k = 0;
 	for (i = 0; i < 3; i++)
 		for (j = 0; j < 3; j++)
-			Ga_m.elements[k++] = Ga_[i][j];
+			Ga_m.elements[k++] = Ga_[i][j];//////////////
 
 	Matrix Q_inver_m;
 	Q_inver_m.columns = 3;
@@ -402,8 +402,8 @@ void chan_2D_algrithm(int number_of_anchor, double* anchor_position, double* ai_
 	if (Za1.elements[1] < anchor_position[1])
 		tag_position[1] = -abs(Za.elements[1]) + anchor_position[1];
 
-	for (i = 0; i < 3; i++)
-		printf("%f \n\n", Za1.elements[i]);
+	for (i = 0; i < 2; i++)
+		printf("%f \n\n", Za.elements[i]);
 
 }
 
